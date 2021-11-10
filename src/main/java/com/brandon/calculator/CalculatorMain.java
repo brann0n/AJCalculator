@@ -2,9 +2,7 @@ package com.brandon.calculator;
 
 import com.brandon.calculator.beans.CommandLineBean;
 import com.brandon.calculator.config.CalculatorConfig;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class CalculatorMain {
 
