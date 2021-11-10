@@ -11,10 +11,17 @@ import java.util.stream.Collectors;
 
 @Component
 @Profile("postfix")
-public class PostFixBean extends AbstractNotationBean {
+public class PostFixBean implements NotationBean {
+
+    private CalculatorBean cBean;
+
+    public PostFixBean(CalculatorBean cBean) {
+        this.cBean = cBean;
+    }
+
     @Override
     public double handleSum(String sumText) throws CalculatorException {
-        String[] functions = sumText.split(" "); //1 1 +
+        String[] functions = sumText.split(" ");
         List<Double> digits = Arrays.stream(functions).map(i -> i.matches("\\d+") ? Double.parseDouble(i) : null).filter(Objects::nonNull).collect(Collectors.toList());
         List<String> operators = Arrays.stream(functions).map(i -> i.matches("\\D+") ? i : null).filter(Objects::nonNull).collect(Collectors.toList());
         if (digits.size() == operators.size() + 1) {
@@ -25,7 +32,7 @@ public class PostFixBean extends AbstractNotationBean {
 
                 digits.remove(digits.size() - 1);
                 operators.remove(0);
-                digits.set(digits.size() - 1, calculate(secondLastDigit, lastDigit, operator));
+                digits.set(digits.size() - 1, cBean.calculate(secondLastDigit, lastDigit, operator.charAt(0)));
             }
 
             return digits.get(0);

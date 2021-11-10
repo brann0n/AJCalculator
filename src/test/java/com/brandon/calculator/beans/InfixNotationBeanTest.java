@@ -1,17 +1,22 @@
 package com.brandon.calculator.beans;
 
-import com.brandon.calculator.beans.InfixNotationBean;
 import com.brandon.calculator.exceptions.CalculatorException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.assertj.core.api.Assertions.*;
+import org.mockito.Mock;
 
-public class InfixTest {
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.MockitoAnnotations.openMocks;
+
+public class InfixNotationBeanTest {
     private InfixNotationBean bean;
+    @Mock
+    private CalculatorBean calculatorBeanMock;
 
     @BeforeEach
     public void setup(){
-        bean = new InfixNotationBean();
+        openMocks(this);
+        bean = new InfixNotationBean(calculatorBeanMock);
     }
 
     @Test

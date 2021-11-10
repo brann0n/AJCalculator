@@ -7,13 +7,11 @@ import org.springframework.stereotype.Component;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Locale;
 
 @Component
 public class CommandLineBean {
     private BufferedReader reader;
     private NotationBean nBean;
-
 
     @Autowired
     public CommandLineBean(NotationBean nBean) {
@@ -24,7 +22,7 @@ public class CommandLineBean {
     }
 
     public void handleCommands() {
-        String commandBuffer = "";
+        String commandBuffer;
         System.out.println("Calculator has started.");
         while (true) {
             try {
