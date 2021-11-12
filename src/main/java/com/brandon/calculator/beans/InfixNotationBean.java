@@ -15,13 +15,14 @@ import java.util.stream.Collectors;
 public class InfixNotationBean implements NotationBean {
 
     private CalculatorBean cBean;
+
     public InfixNotationBean(CalculatorBean cBean) {
         this.cBean = cBean;
     }
 
     @Override
     public double handleSum(String sumText) throws CalculatorException {
-        if(sumContainsParenthesis(sumText)){
+        if (sumContainsParenthesis(sumText)) {
             //follow a special handler first before doing the regular interpretation
             //overwrite the sumText variable to be without ( )
 
@@ -32,15 +33,16 @@ public class InfixNotationBean implements NotationBean {
     }
 
     protected double processRegularSum(String sumText) throws CalculatorException {
-        List<String> digits = new ArrayList<String>(Arrays.asList(sumText.split("\\D+")));
-        List<String> operators = new ArrayList<String>(Arrays.asList(sumText.split("(\\d|\\s)")));
+        List<String> digits = new ArrayList<>(Arrays.asList(sumText.split("(\\+|-|\\*|\\/)")));
+        List<String> operators = new ArrayList<>(Arrays.asList(sumText.split("(\\d+(\\.\\d+)?|\\s)")));
         operators.removeAll(Arrays.asList("", null));
+
         //check if operator and digits
-        if(digits.size() != operators.size() + 1){
+        if (digits.size() != operators.size() + 1) {
             throw new CalculatorException("The amount of operators is not correct for the amount of numbers provided.");
         }
         // 20 + 20 * 10
-        while (digits.size() > 1){
+        while (digits.size() > 1) {
             //first search the operator with the highest rank.
             int highestOperatorIndex = highestOperatorIndex(operators);
 
@@ -57,10 +59,10 @@ public class InfixNotationBean implements NotationBean {
         return Double.parseDouble(digits.get(0));
     }
 
-    protected int highestOperatorIndex(List<String> operators){
-        int highestIndex  = 0;
-        for (int i = 1; i < operators.size(); i++){
-            if(isHigherOperatorRank(operators.get(i), operators.get(i - 1))){
+    protected int highestOperatorIndex(List<String> operators) {
+        int highestIndex = 0;
+        for (int i = 1; i < operators.size(); i++) {
+            if (isHigherOperatorRank(operators.get(i), operators.get(i - 1))) {
                 highestIndex = i;
             }
         }
@@ -77,23 +79,23 @@ public class InfixNotationBean implements NotationBean {
         return currentRank > previousRank;
     }
 
-    private boolean sumContainsParenthesis(String sumText){
+    private boolean sumContainsParenthesis(String sumText) {
         return sumText.contains("(") || sumText.contains(")");
     }
 
-    private String calculateParenthesis(String sumText){
+    private String calculateParenthesis(String sumText) throws CalculatorException {
         int startIndex = sumText.indexOf('(');
         int endIndex = sumText.indexOf(')');
 
         int checkDoubleParenthesis = sumText.lastIndexOf('(');
-        if(startIndex == checkDoubleParenthesis){
-            //todo: perform same calculations as normal
-            String sumInParenthesis = sumText.substring(startIndex, endIndex);
-        }
-        else if (checkDoubleParenthesis > startIndex && checkDoubleParenthesis < endIndex){
+        if (startIndex == checkDoubleParenthesis) {
+            String sumInParenthesis = sumText.substring(startIndex, endIndex + 1);
+            String sumWithoutParenthesis = sumInParenthesis.substring(1, sumInParenthesis.length() - 1);
+            double answer = processRegularSum(sumWithoutParenthesis);
+            return sumText.replace(sumInParenthesis, Double.toString(answer));
+        } else if (checkDoubleParenthesis > startIndex && checkDoubleParenthesis < endIndex) {
             //the other ( is within the ( )
-        }
-        else{
+        } else {
             //ignore for now, the other ( is after ( )
         }
         return "";
