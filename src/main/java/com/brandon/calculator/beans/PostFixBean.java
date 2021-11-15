@@ -22,7 +22,7 @@ public class PostFixBean implements NotationBean {
         List<String> functions = new ArrayList<>(Arrays.asList(sumText.split(" "))); //10 10 + 10 10 * *
         List<String> completedFunctions = recursiveHandlePostFix(functions);
 
-        if (completedFunctions.size() == 1) {
+        if (completedFunctions.size() == 1 && !isOperator(completedFunctions.get(0))) {
             return Double.parseDouble(completedFunctions.get(0));
         }
 
@@ -33,7 +33,7 @@ public class PostFixBean implements NotationBean {
         if (functionArray.size() == 1) return functionArray;
 
         for (int i = 0; i < functionArray.size(); i++) {
-            if (cBean.isOperator(functionArray.get(i))) {
+            if (isOperator(functionArray.get(i))) {
                 //take the previous 2 indexes and use the current operator to calculate
 
                 if (i < 2) throw new CalculatorException("Invalid operator position");
@@ -55,4 +55,7 @@ public class PostFixBean implements NotationBean {
         return Collections.emptyList();
     }
 
+    protected boolean isOperator(String operator) {
+        return operator.equals("+") || operator.equals("-") || operator.equals("*") || operator.equals("/");
+    }
 }

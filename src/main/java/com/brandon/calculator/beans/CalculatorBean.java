@@ -20,8 +20,4 @@ public class CalculatorBean {
                 throw new CalculatorException("Unknown Operator: " + operator);
         }
     }
-
-    public boolean isOperator(String operator) {
-        return operator.equals("+") || operator.equals("-") || operator.equals("*") || operator.equals("/");
-    }
 }

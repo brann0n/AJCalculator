@@ -6,16 +6,19 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 public class InfixNotationBeanTest {
     private InfixNotationBean bean;
+
     @Mock
     private CalculatorBean calculatorBeanMock;
 
     @BeforeEach
-    public void setup(){
+    public void setup() throws CalculatorException {
         openMocks(this);
+        when(calculatorBeanMock.calculate(10.0, 10.0, '+')).thenReturn(20d);
         bean = new InfixNotationBean(calculatorBeanMock);
     }
 
