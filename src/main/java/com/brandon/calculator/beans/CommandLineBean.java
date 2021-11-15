@@ -37,7 +37,7 @@ public class CommandLineBean {
             } catch (IOException e) {
                 break;
             } catch (CalculatorException e) {
-                System.out.println("Something was wrong with the entered calculation: " + e.getMessage());
+                System.out.println("Calculator Error: " + e.getMessage());
             }
         }
         System.out.println("Calculator has stopped.");

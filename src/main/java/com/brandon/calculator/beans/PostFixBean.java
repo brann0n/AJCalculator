@@ -4,9 +4,7 @@ import com.brandon.calculator.exceptions.CalculatorException;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -21,25 +19,40 @@ public class PostFixBean implements NotationBean {
 
     @Override
     public double handleSum(String sumText) throws CalculatorException {
-        String[] functions = sumText.split(" ");
-        List<Double> digits = Arrays.stream(functions).map(i -> i.matches("\\d+") ? Double.parseDouble(i) : null).filter(Objects::nonNull).collect(Collectors.toList());
-        List<String> operators = Arrays.stream(functions).map(i -> i.matches("\\D+") ? i : null).filter(Objects::nonNull).collect(Collectors.toList());
-        if (digits.size() == operators.size() + 1) {
-            while (digits.size() > 1) {
-                double lastDigit = digits.get(digits.size() - 1);
-                double secondLastDigit = digits.get(digits.size() - 2);
-                String operator = operators.get(0);
+        List<String> functions = new ArrayList<>(Arrays.asList(sumText.split(" "))); //10 10 + 10 10 * *
+        List<String> completedFunctions = recursiveHandlePostFix(functions);
 
-                digits.remove(digits.size() - 1);
-                operators.remove(0);
-                digits.set(digits.size() - 1, cBean.calculate(secondLastDigit, lastDigit, operator.charAt(0)));
-            }
-
-            return digits.get(0);
-        } else {
-            throw new CalculatorException("Invalid operator count");
+        if (completedFunctions.size() == 1) {
+            return Double.parseDouble(completedFunctions.get(0));
         }
+
+        throw new CalculatorException("Something went wrong!");
     }
 
+    protected List<String> recursiveHandlePostFix(List<String> functionArray) throws CalculatorException {
+        if (functionArray.size() == 1) return functionArray;
+
+        for (int i = 0; i < functionArray.size(); i++) {
+            if (cBean.isOperator(functionArray.get(i))) {
+                //take the previous 2 indexes and use the current operator to calculate
+
+                if (i < 2) throw new CalculatorException("Invalid operator position");
+
+                double left = Double.parseDouble(functionArray.get(i - 2));
+                double right = Double.parseDouble(functionArray.get(i - 1));
+                char operator = functionArray.get(i).charAt(0);
+
+                double result = cBean.calculate(left, right, operator);
+
+                functionArray.set(i - 2, String.valueOf(result));
+                functionArray.remove(i);
+                functionArray.remove(i - 1);
+
+                return recursiveHandlePostFix(functionArray);
+            }
+        }
+
+        return Collections.emptyList();
+    }
 
 }

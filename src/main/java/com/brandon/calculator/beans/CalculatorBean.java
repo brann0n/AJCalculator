@@ -6,15 +6,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class CalculatorBean {
     public double calculate(double left, double right, char operator) throws CalculatorException {
-        double sum = 0;
-        switch(operator){
-            case('+'): return left + right;
-            case('-'): return left - right;
-            case('*'): return left * right;
-            case('/'):
+        switch (operator) {
+            case ('+'):
+                return left + right;
+            case ('-'):
+                return left - right;
+            case ('*'):
+                return left * right;
+            case ('/'):
                 if (right == 0) throw new CalculatorException("Cannot divide by zero");
                 return left / right;
-            default: throw new CalculatorException("Unknown Operator: " + operator);
+            default:
+                throw new CalculatorException("Unknown Operator: " + operator);
         }
+    }
+
+    public boolean isOperator(String operator) {
+        return operator.equals("+") || operator.equals("-") || operator.equals("*") || operator.equals("/");
     }
 }
