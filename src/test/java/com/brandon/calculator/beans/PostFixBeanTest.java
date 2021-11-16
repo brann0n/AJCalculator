@@ -4,6 +4,7 @@ import com.brandon.calculator.exceptions.CalculatorException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import static org.assertj.core.api.Assertions.*;
@@ -11,6 +12,8 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 public class PostFixBeanTest {
+
+    @InjectMocks
     private PostFixBean bean;
 
     @Mock
@@ -21,7 +24,7 @@ public class PostFixBeanTest {
         openMocks(this);
         when(calculatorBeanMock.calculate(10.0, 10.0, '+')).thenReturn(20d);
         when(calculatorBeanMock.calculate(10.0, 10.0, '*')).thenReturn(100d);
-        bean = new PostFixBean(calculatorBeanMock);
+        //bean = new PostFixBean(calculatorBeanMock);
     }
 
     @Test
@@ -64,7 +67,6 @@ public class PostFixBeanTest {
 
     @Test
     void isOperator() {
-        CalculatorBean c = new CalculatorBean();
         assertThat(bean.isOperator("+")).isEqualTo(true);
         assertThat(bean.isOperator("*")).isEqualTo(true);
         assertThat(bean.isOperator("**")).isEqualTo(false);

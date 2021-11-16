@@ -3,6 +3,7 @@ package com.brandon.calculator.beans;
 import com.brandon.calculator.exceptions.CalculatorException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import static org.assertj.core.api.Assertions.*;
@@ -10,6 +11,8 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 public class InfixNotationBeanTest {
+
+    @InjectMocks
     private InfixNotationBean bean;
 
     @Mock
@@ -19,7 +22,7 @@ public class InfixNotationBeanTest {
     public void setup() throws CalculatorException {
         openMocks(this);
         when(calculatorBeanMock.calculate(10.0, 10.0, '+')).thenReturn(20d);
-        bean = new InfixNotationBean(calculatorBeanMock);
+        //bean = new InfixNotationBean(calculatorBeanMock);
     }
 
     @Test

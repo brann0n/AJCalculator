@@ -14,10 +14,8 @@ public class CommandLineBean {
     private NotationBean nBean;
 
     @Autowired
-    public CommandLineBean(NotationBean nBean) {
-        reader = new BufferedReader(
-                new InputStreamReader(System.in));
-
+    public CommandLineBean(NotationBean nBean, BufferedReader reader) {
+        this.reader = reader;
         this.nBean = nBean;
     }
 
